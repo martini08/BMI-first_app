@@ -5,15 +5,30 @@ import ImageContainer from './ImageContainer'
 
 class App extends Component {
 
-  
-  ObliczBMI() {
-  
-    var message = "";
-    var height = Number(document.getElementById("height").value);
-    var weight = Number(document.getElementById("weight").value);
-    var bmi = weight / Math.pow(height/100)
-    document.getElementById("bmi").innerHTML = "Twoje BMI wynosi : " + bmi;
+  constructor(props) {
+    super(props);
+    this.state = {weight: '', height: '', bmi: '', message: ''}
+    this.heightchange = this.heightchange.bind(this);
+    this.weightchange = this.weightchange.bind(this);
+  }
+  heightchange(e){
+    this.setState({height: e.target.value});
+    e.preventDefault();
+  }
+  weightchange(e){
+    this.setState({weight: e.target.value});
+    e.preventDefault();
+  }
 
+  bmichange(e){
+    this.setState({bmi: e.target.value});
+    e.preventDefault();
+  }
+  
+  obliczBMI(){
+
+    var bmi = this.state.weight/Math.pow(this.state.height/100);   
+    var message = "";
     if(bmi < 16){
         message = "Twój wskaźnik BMI wskazuje na wygłodzenie";
     }
@@ -46,16 +61,16 @@ class App extends Component {
   
 render() {
     return (
-      <body>
         <div>
         <header className="App-header">
           <h1 className="App-title">Oblicz swoje BMI</h1>
           <ImageContainer image='first.png'/>
-          Waga [kg] <input type='text' id="weight"/> 
-          Wzrost [cm] <input type='text' id="height"/>
-          <button className="button"> Oblicz</button>
-          Twoje BMI wynosi:<input type='text'/>
-          <ul></ul>
+          Waga [kg] <input type='text' value={this.state.weight} onChange={this.weightchange}/>
+          Wzrost [cm] <input type='text'value={this.state.height} onChange={this.heightchange}/>
+          <button className="button-test" onclick={this.obliczBMI}> Oblicz </button>
+          <p>Twoje BMI wynosi:
+          <input type='text'value={this.state.bmi} onChange={this.bmichange}/>  
+          </p>
           <ul1>
             <li> poniżej 16,0 - wygłodzenie</li>
           </ul1>
@@ -82,10 +97,8 @@ render() {
           </ul8>
         </header>
         </div>
-      </body>
     );
   }
 }
-
 
 export default App;
